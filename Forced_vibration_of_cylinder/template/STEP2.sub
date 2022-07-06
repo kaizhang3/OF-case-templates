@@ -1,0 +1,22 @@
+#!/bin/bash
+#SBATCH   --partition=nonpre
+#SBATCH   --job-name=??_!!
+#SBATCH   -n 5 
+#SBATCH   --mem=5G
+#SBATCH   --time=72:00:00
+#SBATCH   --output=sol.out
+#SBATCH   --error=error.sol.log
+#SBATCH   --mail-user=kai.zhang3@rutgers.edu
+#SBATCH   --mail-type=FAIL
+#SBATCH   --requeue
+#SBATCH   --export=ALL
+
+decomposePar
+srun -n 5 renumberMesh -overwrite -parallel  
+srun -n 5 pimpleDyMFoam -parallel 
+srun -n 5 postProcess -func sampleDict -parallel -time 200.2:300
+
+#module load MATLAB/R2020a
+#srun -n 1 matlab -nodisplay -nosplash -nodesktop < DMDonVort.m
+#srun -n 1 matlab -nodisplay -nosplash -nodesktop < PlotFlow.m
+

@@ -1,0 +1,93 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  4.1                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volVectorField;
+    location    "0";
+    object      U;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField	uniform (1 0 0);
+/*internalField   #codeStream
+{
+    codeInclude
+    #{
+        #include "fvCFD.H"
+    #};
+
+    codeOptions
+    #{
+              -I$(LIB_SRC)/finiteVolume/lnInclude \
+              -I$(LIB_SRC)/meshTools/lnInclude
+    #};
+
+    codeLibs
+    #{
+              -lmeshTools \
+              -lfiniteVolume
+    #};
+
+    code
+
+    #{
+              const IOdictionary& d = static_cast<const IOdictionary&>(dict);
+              const fvMesh& mesh = refCast<const fvMesh>(d.db());
+
+              vectorField T(mesh.nCells());
+
+              const vectorField& CC = mesh.C(); //cell center
+
+
+              forAll(CC,cellI)
+              {
+                        scalar y = CC[cellI].y();
+
+                        T[cellI] = vector(1+0.01*y, 0, 0);
+              }
+            T.writeEntry("", os);
+    #};
+};*/
+
+boundaryField
+{
+    cylinder
+    {
+        type            movingWallVelocity;
+        value           uniform (0 0 0);
+    }
+    front
+    {
+        type            empty;
+    }
+    inlet
+    {
+        type            fixedValue;
+        //type		??;
+	value           uniform (1 0 0);
+    }
+    back
+    {
+        type            empty;
+    }
+    outlet
+    {
+        type            zeroGradient;
+    }
+    sides
+    {
+	type		slip;
+    }
+}
+
+
+// ************************************************************************* //

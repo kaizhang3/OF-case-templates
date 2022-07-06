@@ -1,0 +1,16 @@
+#!/bin/bash
+#SBATCH   --partition=main
+#SBATCH   --job-name=matlab
+#SBATCH   -n 1 
+#SBATCH   --mem=20G
+#SBATCH   --time=72:00:00
+#SBATCH   --output=sol.out
+#SBATCH   --error=error.sol.log
+#SBATCH   --mail-user=kai.zhang3@rutgers.edu
+#SBATCH   --mail-type=FAIL
+#SBATCH   --requeue
+#SBATCH   --export=ALL
+
+module load MATLAB/R2020a
+srun -n 1 matlab -nodisplay -nosplash -nodesktop < DMDonVort.m 
+srun -n 1 matlab -nodisplay -nosplash -nodesktop < PlotFlow.m
