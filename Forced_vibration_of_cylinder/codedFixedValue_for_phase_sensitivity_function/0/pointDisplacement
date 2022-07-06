@@ -1,0 +1,69 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  4.1                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       pointVectorField;
+    location    "0";
+    object      pointDisplacement;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 1 0 0 0 0 0];
+
+internalField   uniform (0 0 0);
+
+boundaryField
+{
+    cylinder
+    {
+        type            codedFixedValue;
+        value           uniform (0 0 0);
+        redirectType 	impulse;
+	code
+	#
+	{
+	const scalar t = this->db().time().value();
+	const scalar t0 = ??; 
+	const scalar sigma = 0.1;
+	const scalar pi = constant::mathematical::pi;
+	const scalar amp = 0.005;
+	const scalar theta = 90;
+	(*this)==vector( cos(theta*pi/180)*amp/(sqrt(2*pi)*sigma)*exp(-0.5*sqr((t-t0)/sigma)) , sin(theta*pi/180)*amp/(sqrt(2*pi)*sigma)*exp(-0.5*sqr((t-t0)/sigma)), 0);
+
+	
+	#};
+   		
+    }
+    front
+    {
+        type            empty;
+    }
+    inlet
+    {
+        type            fixedValue;
+        value           uniform (0 0 0);
+    }
+    back
+    {
+        type            empty;
+    }
+    outlet
+    {
+        type            fixedValue;
+        value           uniform (0 0 0);
+    }
+    sides
+    {
+	type            slip;
+    }
+}
+
+
+// ************************************************************************* //

@@ -1,0 +1,16 @@
+#!/bin/bash
+#SBATCH   --partition=main
+#SBATCH   --job-name=preprocessing
+#SBATCH   --nodes=1
+#SBATCH   --mem=1G
+#SBATCH   --time=72:00:00
+#SBATCH   --output=pre.out
+#SBATCH   --error=error.log
+#SBATCH   --mail-user=kai.zhang3@rutgers.edu
+#SBATCH   --mail-type=FAIL
+#SBATCH   --requeue
+#SBATCH   --export=ALL
+
+decomposePar
+
+
